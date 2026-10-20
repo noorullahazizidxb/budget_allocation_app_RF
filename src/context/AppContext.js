@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // 5. The reducer - this is used to update the state, based on the action
@@ -95,6 +95,12 @@ export const AppReducer = (state, action) => {
                 ...state
             }
 
+        case 'LOAD_STATE':
+            return {
+                ...state,
+                ...action.payload,
+            };
+
         default:
             return state;
     }
@@ -121,6 +127,35 @@ export const AppContext = createContext();
 export const AppProvider = (props) => {
     // 4. Sets up the app state. takes a reducer, and an initial state
     const [state, dispatch] = useReducer(AppReducer, initialState);
+    const loaded = useRef(false);
+    const lastSaved = useRef(null);
+
+    // Load persisted state from the Neon-backed API on startup
+    useEffect(() => {
+        fetch('/api/state')
+            .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+            .then((data) => {
+                lastSaved.current = JSON.stringify(data);
+                dispatch({ type: 'LOAD_STATE', payload: data });
+            })
+            .catch((e) => console.warn('Could not load saved state', e))
+            .finally(() => { loaded.current = true; });
+    }, []);
+
+    // Persist changes (reducer mutates in place, so compare a serialized snapshot)
+    const snapshot = JSON.stringify({ budget: state.budget, currency: state.currency, expenses: state.expenses });
+    useEffect(() => {
+        if (!loaded.current || snapshot === lastSaved.current) return;
+        const t = setTimeout(() => {
+            lastSaved.current = snapshot;
+            fetch('/api/state', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: snapshot,
+            }).catch((e) => console.warn('Could not save state', e));
+        }, 400);
+        return () => clearTimeout(t);
+    });
     let remaining = 0;
 
     if (state.expenses) {
