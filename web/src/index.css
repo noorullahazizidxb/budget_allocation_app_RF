@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 33% 98%; --foreground: 224 40% 10%;
+    --card: 0 0% 100%; --card-foreground: 224 40% 10%;
+    --popover: 0 0% 100%; --popover-foreground: 224 40% 10%;
+    --primary: 221 92% 46%; --primary-foreground: 0 0% 100%;
+    --secondary: 220 20% 94%; --secondary-foreground: 224 40% 14%;
+    --muted: 220 20% 94%; --muted-foreground: 220 10% 44%;
+    --accent: 190 90% 94%; --accent-foreground: 221 92% 30%;
+    --destructive: 0 80% 55%; --destructive-foreground: 0 0% 100%;
+    --border: 220 16% 88%; --input: 220 16% 86%; --ring: 221 92% 46%;
+    --radius: 0.85rem;
+  }
+  .dark {
+    --background: 222 30% 6%; --foreground: 30 20% 96%;
+    --card: 222 26% 10%; --card-foreground: 30 20% 96%;
+    --popover: 222 26% 10%; --popover-foreground: 30 20% 96%;
+    --primary: 24 95% 55%; --primary-foreground: 222 30% 8%;
+    --secondary: 222 18% 16%; --secondary-foreground: 30 20% 96%;
+    --muted: 222 18% 16%; --muted-foreground: 220 10% 64%;
+    --accent: 24 60% 18%; --accent-foreground: 30 95% 80%;
+    --destructive: 0 70% 50%; --destructive-foreground: 0 0% 100%;
+    --border: 222 16% 18%; --input: 222 16% 22%; --ring: 24 95% 55%;
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground antialiased; font-feature-settings: 'cv11', 'ss01'; }
+}
+
+.bg-grid {
+  background-image: radial-gradient(hsl(var(--primary) / 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+}

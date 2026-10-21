@@ -1,0 +1,47 @@
+// Generated into schema.prisma by `npm run db:select` (reads DB_PROVIDER).
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "__PROVIDER__"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  name         String
+  passwordHash String
+  currency     String       @default("USD")
+  budget       Float        @default(0)
+  createdAt    DateTime     @default(now())
+  allocations  Allocation[]
+}
+
+model Allocation {
+  id        String    @id @default(cuid())
+  userId    String
+  name      String
+  amount    Float     @default(0)
+  color     String    @default("#3b82f6")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expenses  Expense[]
+
+  @@unique([userId, name])
+}
+
+model Expense {
+  id           String     @id @default(cuid())
+  allocationId String
+  amount       Float
+  note         String     @default("")
+  spentAt      DateTime   @default(now())
+  allocation   Allocation @relation(fields: [allocationId], references: [id], onDelete: Cascade)
+
+  @@index([allocationId])
+}
