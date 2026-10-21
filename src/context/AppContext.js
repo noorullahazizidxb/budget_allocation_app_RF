@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useReducer, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getRecaptchaToken, preloadRecaptcha } from '../recaptcha';
 // 5. The reducer - this is used to update the state, based on the action
 export const AppReducer = (state, action) => {
     let budget = 0;
@@ -132,6 +133,7 @@ export const AppProvider = (props) => {
 
     // Load persisted state from the Neon-backed API on startup
     useEffect(() => {
+        preloadRecaptcha();
         fetch('/api/state')
             .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
             .then((data) => {
@@ -148,11 +150,14 @@ export const AppProvider = (props) => {
         if (!loaded.current || snapshot === lastSaved.current) return;
         const t = setTimeout(() => {
             lastSaved.current = snapshot;
-            fetch('/api/state', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: snapshot,
-            }).catch((e) => console.warn('Could not save state', e));
+            getRecaptchaToken('save_state')
+                .then((token) => fetch('/api/state', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Recaptcha-Token': token },
+                    body: snapshot,
+                }))
+                .then((r) => { if (!r.ok) { lastSaved.current = null; console.warn('Save rejected', r.status); } })
+                .catch((e) => { lastSaved.current = null; console.warn('Could not save state', e); });
         }, 400);
         return () => clearTimeout(t);
     });

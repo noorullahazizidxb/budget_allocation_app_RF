@@ -1,9 +1,12 @@
 const { getSql, ensureSchema, readState } = require('../lib/db');
+const { verifyRecaptcha, clientIp } = require('../lib/recaptcha');
 
 module.exports = async (req, res) => {
   try {
     if (req.method === 'GET') return res.status(200).json(await readState());
     if (req.method === 'PUT') {
+      const v = await verifyRecaptcha(req.headers['x-recaptcha-token'], 'save_state', clientIp(req));
+      if (!v.ok) return res.status(v.status).json({ error: v.error || 'recaptcha verification failed', errors: v.errors });
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
       await ensureSchema();
       const q = getSql();
