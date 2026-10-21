@@ -5,6 +5,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  envPrefix: ['VITE_', 'REACT_APP_'],
   resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
   server: { proxy: { '/api': process.env.VITE_API_PROXY || 'http://localhost:4000' } },
   preview: { proxy: { '/api': process.env.VITE_API_PROXY || 'http://localhost:4000' } },

@@ -39,4 +39,4 @@ from `schema.template.prisma` before `generate`/`db push` (run automatically by 
 `vercel.json` builds both apps, serves `web/dist` as a static SPA and runs NestJS as a single serverless
 function (`api/index.js` → `server/dist/serverless.js`). Use a hosted DB (Neon recommended; SQLite does not persist on Vercel).
 
-Env vars on Vercel: `DB_PROVIDER`, `DATABASE_URL`, `JWT_SECRET`, optional `JWT_EXPIRES_IN`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`.
+Env vars on Vercel: `DB_PROVIDER`, `DATABASE_URL`, `JWT_SECRET`, optional `JWT_EXPIRES_IN`, `TURSO_*`, `RECAPTCHA_SECRET_KEY` + `REACT_APP_RECAPTCHA_SITE_KEY` (or `VITE_…`), `RECAPTCHA_ALLOWED_HOSTS`.

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { PieChart, ShieldCheck, Sparkles } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
+import { preloadRecaptcha } from '@/lib/recaptcha';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 
@@ -11,6 +12,7 @@ const perks = [
 ];
 
 export function AuthLayout({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {
+  useEffect(preloadRecaptcha, []);
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <aside className="relative hidden overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-500 p-12 text-white dark:from-orange-700 dark:via-orange-600 dark:to-amber-500 lg:flex lg:flex-col lg:justify-between">

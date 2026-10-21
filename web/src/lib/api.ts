@@ -37,7 +37,8 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
 
 export const http = {
   get: <T>(p: string) => api<T>(p),
-  post: <T>(p: string, data?: unknown) => api<T>(p, { method: 'POST', body: JSON.stringify(data ?? {}) }),
+  post: <T>(p: string, data?: unknown, headers?: Record<string, string>) =>
+    api<T>(p, { method: 'POST', body: JSON.stringify(data ?? {}), headers }),
   patch: <T>(p: string, data?: unknown) => api<T>(p, { method: 'PATCH', body: JSON.stringify(data ?? {}) }),
   del: <T>(p: string) => api<T>(p, { method: 'DELETE' }),
 };
