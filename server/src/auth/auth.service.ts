@@ -20,12 +20,12 @@ export class AuthService {
 
   async signIn(dto: SignInDto): Promise<AuthResult> {
     const user = await this.users.findByEmail(dto.email);
-    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash)))
+    if (!user || !user.passwordHash || !(await bcrypt.compare(dto.password, user.passwordHash)))
       throw new UnauthorizedException('Invalid email or password');
     return this.issue(user);
   }
 
-  private async issue(user: { id: string; name: string; email: string }): Promise<AuthResult> {
+  async issue(user: { id: string; name: string; email: string }): Promise<AuthResult> {
     const token = await this.jwt.signAsync({ sub: user.id, email: user.email });
     return { token, user: { id: user.id, name: user.name, email: user.email } };
   }

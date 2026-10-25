@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FormField } from '@/components/ui/form-field';
 import { schemaResolver } from '@/lib/form';
 import { AuthLayout } from './auth-layout';
+import { GoogleButton } from './google-button';
 import { signInSchema, type SignInValues } from './auth.schemas';
 import { authService } from './auth.service';
 import { PasswordToggle } from './password-toggle';
@@ -35,6 +36,7 @@ export function SignInPage() {
           {isSubmitting && <Loader2 className="animate-spin" />} Sign in
         </Button>
       </form>
+      <GoogleButton />
       <p className="text-center text-sm text-muted-foreground">
         New here?{' '}
         <Link to="/sign-up" className="font-medium text-primary hover:underline">Create an account</Link>

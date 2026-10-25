@@ -17,7 +17,15 @@ export class UsersRepository {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  create(data: { name: string; email: string; passwordHash: string }) {
+  findByGoogleId(googleId: string) {
+    return this.prisma.user.findUnique({ where: { googleId } });
+  }
+
+  linkGoogle(id: string, googleId: string) {
+    return this.prisma.user.update({ where: { id }, data: { googleId } });
+  }
+
+  create(data: { name: string; email: string; passwordHash?: string | null; googleId?: string }) {
     return this.prisma.user.create({
       data: { ...data, allocations: { create: DEFAULT_CATEGORIES } },
     });

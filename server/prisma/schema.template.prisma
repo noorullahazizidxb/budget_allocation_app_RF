@@ -14,7 +14,8 @@ model User {
   id           String       @id @default(cuid())
   email        String       @unique
   name         String
-  passwordHash String
+  passwordHash String?
+  googleId     String?      @unique
   currency     String       @default("USD")
   budget       Float        @default(0)
   createdAt    DateTime     @default(now())
