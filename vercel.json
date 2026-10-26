@@ -2,9 +2,75 @@
   "installCommand": "npm ci --prefix server && npm ci --prefix web",
   "buildCommand": "npm run build --prefix server && npm run build --prefix web",
   "outputDirectory": "web/dist",
-  "functions": { "api/index.js": { "includeFiles": "server/{dist,node_modules/.prisma,prisma}/**" } },
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "server/{dist,node_modules/.prisma,prisma}/**"
+    }
+  },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/((?!api/)(?!.*\\.[A-Za-z0-9]+$).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/site.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/auth/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(favicon\\.ico|favicon\\.svg|favicon-16\\.png|favicon-32\\.png|icon-48\\.png|icon-96\\.png|icon-192\\.png|icon-512\\.png|icon-maskable-192\\.png|icon-maskable-512\\.png|apple-touch-icon\\.png|og-image\\.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, must-revalidate"
+        }
+      ]
+    }
   ]
 }
