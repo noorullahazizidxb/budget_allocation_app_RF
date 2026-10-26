@@ -1,14 +1,22 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
 import { AppRoutes } from '@/App';
 import { signUpSchema } from '@/features/auth/auth.schemas';
 import { budgetSettingsSchema } from '@/features/budget/budget.schemas';
 
-const renderAt = (path: string) => render(<MemoryRouter initialEntries={[path]}><AppRoutes /></MemoryRouter>);
+const renderAt = (path: string) => render(<HelmetProvider><MemoryRouter initialEntries={[path]}><AppRoutes /></MemoryRouter></HelmetProvider>);
 
 describe('auth pages', () => {
-  it('redirects guests to sign-in and shows the logo', () => {
+  it('shows guests the public landing page with sign-in links', () => {
     renderAt('/');
+    expect(screen.getByRole('heading', { level: 1, name: /free budget planner and budget manager/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /sign in/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByAltText(/budget manager by devminds/i).length).toBeGreaterThan(0);
+  });
+
+  it('shows the sign-in page and logo', () => {
+    renderAt('/sign-in');
     expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
     expect(screen.getAllByAltText(/budget manager by devminds/i).length).toBeGreaterThan(0);
   });
