@@ -5,7 +5,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
 import { Seo } from '@/seo/seo';
-import { DEFAULT_DESCRIPTION, FAQ, FEATURES, PRODUCTS, STEPS, homeJsonLd } from '@/seo/site';
+import { DEFAULT_DESCRIPTION, FAQ, FEATURES, STEPS, homeJsonLd } from '@/seo/site';
 
 const ICONS = [Wallet, PieChart, CheckCircle2, BarChart3, ShieldCheck, SunMoon];
 
@@ -87,14 +87,6 @@ export function LandingPage() {
           </p>
         </section>
 
-        <nav aria-labelledby="products" className="container pb-12">
-          <h2 id="products" className="text-center text-xl font-semibold">More DevMinds products</h2>
-          <ul className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-            {PRODUCTS.map((p) => (
-              <li key={p.url}><a href={p.url} className="text-primary hover:underline">{p.label}</a></li>
-            ))}
-          </ul>
-        </nav>
       </main>
       <SiteFooter />
     </div>
