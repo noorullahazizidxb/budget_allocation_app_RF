@@ -1,8 +1,7 @@
-import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/ui/submit-button';
 import { FormField } from '@/components/ui/form-field';
 import { schemaResolver } from '@/lib/form';
 import { AuthLayout } from './auth-layout';
@@ -32,14 +31,14 @@ export function SignInPage() {
           trailing={<PasswordToggle visible={show} onToggle={() => setShow((v) => !v)} />}
           {...register('password')}
         />
-        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="animate-spin" />} Sign in
-        </Button>
+        <SubmitButton className="w-full" size="lg" pending={isSubmitting}>
+          Sign in
+        </SubmitButton>
       </form>
       <GoogleButton />
       <p className="text-center text-sm text-muted-foreground">
         New here?{' '}
-        <Link to="/sign-up" className="font-medium text-primary hover:underline">Create an account</Link>
+        <Link to="/sign-up" className="rounded-sm font-medium text-primary underline-offset-4 hover:underline">Create an account</Link>
       </p>
     </AuthLayout>
   );

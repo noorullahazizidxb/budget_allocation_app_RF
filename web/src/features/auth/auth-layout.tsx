@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { PieChart, ShieldCheck, Sparkles } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { preloadRecaptcha } from '@/lib/recaptcha';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -22,7 +23,7 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
           animate={{ scale: [1, 1.15, 1] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
-        <div className="relative rounded-xl bg-white/95 px-4 py-3 shadow-lg backdrop-blur w-fit dark:bg-neutral-950/90">
+        <div className="relative w-fit rounded-xl bg-white/95 px-4 py-3 shadow-lg backdrop-blur dark:bg-neutral-950/90">
           <Logo />
         </div>
         <div className="relative space-y-8">
@@ -30,7 +31,7 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
           <ul className="space-y-5">
             {perks.map(({ icon: Icon, title: t, text }, i) => (
               <motion.li key={t} className="flex gap-4" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.1 }}>
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white/15"><Icon className="h-5 w-5" /></span>
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white/15"><Icon className="h-5 w-5" aria-hidden /></span>
                 <div>
                   <p className="font-semibold">{t}</p>
                   <p className="text-sm text-white/80">{text}</p>
@@ -42,20 +43,22 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
         <p className="relative text-sm text-white/70">© {new Date().getFullYear()} DevMinds</p>
       </aside>
 
-      <main className="relative flex flex-col">
-        <div className="flex items-center justify-between p-6">
-          <Logo variant="compact" className="lg:invisible" />
+      <main id="main" className="relative flex flex-col">
+        <div className="flex items-center justify-between gap-3 px-4 py-4 sm:p-6">
+          <Link to="/" aria-label="DevMinds Budget App home" className="rounded-md lg:invisible">
+            <Logo variant="compact" />
+          </Link>
           <ThemeToggle />
         </div>
-        <div className="flex flex-1 items-center justify-center px-6 pb-12">
+        <div className="flex flex-1 items-start justify-center px-4 pb-12 pt-4 sm:items-center sm:px-6 sm:pt-0">
           <motion.div
-            className="w-full max-w-sm space-y-6"
+            className="w-full max-w-sm space-y-6 sm:rounded-2xl sm:border sm:bg-card sm:p-8 sm:shadow-sm lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
           >
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
               <p className="text-muted-foreground">{subtitle}</p>
             </div>
             {children}
