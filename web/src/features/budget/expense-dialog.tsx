@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { FormField } from '@/components/ui/form-field';
+import { SubmitButton } from '@/components/ui/submit-button';
 import { schemaResolver } from '@/lib/form';
 import { useBudgetStore, type Allocation } from '@/stores/budget.store';
 import { expenseSchema, type ExpenseValues } from './budget.schemas';
@@ -29,9 +30,12 @@ export function ExpenseDialog({ allocation, onOpenChange }: Props) {
           <DialogDescription>Log spending against <strong>{allocation?.name}</strong>.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-          <FormField label="Amount" type="number" step="0.01" min="0" autoFocus error={errors.amount?.message} {...register('amount')} />
+          <FormField label="Amount" type="number" inputMode="decimal" step="0.01" min="0" autoFocus error={errors.amount?.message} {...register('amount')} />
           <FormField label="Note (optional)" placeholder="e.g. Ad campaign" error={errors.note?.message} {...register('note')} />
-          <Button type="submit" className="w-full" disabled={isSubmitting}>Add expense</Button>
+          <DialogFooter>
+            <DialogClose asChild><Button type="button" variant="outline">Cancel</Button></DialogClose>
+            <SubmitButton pending={isSubmitting}>Add expense</SubmitButton>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

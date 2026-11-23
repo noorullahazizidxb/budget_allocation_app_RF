@@ -26,8 +26,25 @@
     --destructive: 0 70% 50%; --destructive-foreground: 0 0% 100%;
     --border: 222 16% 18%; --input: 222 16% 22%; --ring: 24 95% 55%;
   }
+  :root { color-scheme: light; }
+  .dark { color-scheme: dark; }
   * { @apply border-border; }
+  html { scroll-padding-top: 5rem; }
   body { @apply bg-background text-foreground antialiased; font-feature-settings: 'cv11', 'ss01'; }
+  :focus-visible { @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background; }
+  ::selection { background: hsl(var(--primary) / 0.2); }
+}
+
+@layer components {
+  /* Visually hidden until focused: lets keyboard users jump past the header. */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground;
+  }
+  .skeleton { @apply animate-pulse rounded-md bg-muted; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
 }
 
 .bg-grid {

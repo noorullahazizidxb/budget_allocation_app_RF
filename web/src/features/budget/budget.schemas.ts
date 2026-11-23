@@ -23,4 +23,13 @@ export type ExpenseValues = z.infer<typeof expenseSchema>;
 export type BudgetSettingsValues = yup.InferType<typeof budgetSettingsSchema>;
 
 export const CURRENCIES = ['USD', 'EUR', 'GBP', 'AFN', 'INR', 'AED', 'PKR'] as const;
-export const PALETTE = ['#3b82f6', '#f97316', '#10b981', '#a855f7', '#ef4444', '#06b6d4', '#eab308', '#ec4899'];
+export const PALETTE = [
+  { value: '#3b82f6', name: 'Blue' },
+  { value: '#f97316', name: 'Orange' },
+  { value: '#10b981', name: 'Green' },
+  { value: '#a855f7', name: 'Purple' },
+  { value: '#ef4444', name: 'Red' },
+  { value: '#06b6d4', name: 'Cyan' },
+  { value: '#eab308', name: 'Yellow' },
+  { value: '#ec4899', name: 'Pink' },
+] as const;

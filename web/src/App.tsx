@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import { GoogleCompletePage } from '@/features/auth/google-complete-page';
 import { SignInPage } from '@/features/auth/sign-in-page';
 import { SignUpPage } from '@/features/auth/sign-up-page';
+import { DashboardSkeleton } from '@/features/budget/dashboard-skeleton';
 import { LandingPage } from '@/features/landing/landing-page';
 import { Seo } from '@/seo/seo';
 import { pageJsonLd } from '@/seo/site';
@@ -21,7 +22,7 @@ const Home = () =>
   useAuthStore((s) => s.token) ? (
     <>
       <Seo title="My budget — DevMinds Budget App" noindex />
-      <Suspense fallback={null}>
+      <Suspense fallback={<div className="container py-8"><DashboardSkeleton /></div>}>
         <DashboardPage />
       </Suspense>
     </>

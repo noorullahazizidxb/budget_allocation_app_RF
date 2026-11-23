@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { FormField } from '@/components/ui/form-field';
+import { fieldClassName } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SubmitButton } from '@/components/ui/submit-button';
 import { schemaResolver } from '@/lib/form';
 import { useBudgetStore } from '@/stores/budget.store';
 import { budgetSettingsSchema, CURRENCIES, type BudgetSettingsValues } from './budget.schemas';
@@ -30,14 +32,27 @@ export function BudgetSettingsDialog({ open, onOpenChange }: { open: boolean; on
           <DialogDescription>Set your total budget and currency.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-          <FormField label="Total budget" type="number" step="0.01" min="0" error={errors.budget?.message} {...register('budget')} />
+          <FormField
+            label="Total budget"
+            type="number"
+            inputMode="decimal"
+            step="0.01"
+            min="0"
+            autoFocus
+            hint="Allocations cannot add up to more than this amount."
+            error={errors.budget?.message}
+            {...register('budget')}
+          />
           <div className="grid gap-2">
             <Label htmlFor="currency">Currency</Label>
-            <select id="currency" className="h-10 rounded-md border border-input bg-background px-3 text-sm" {...register('currency')}>
+            <select id="currency" className={fieldClassName} {...register('currency')}>
               {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
-          <Button type="submit" className="w-full" disabled={isSubmitting}>Save</Button>
+          <DialogFooter>
+            <DialogClose asChild><Button type="button" variant="outline">Cancel</Button></DialogClose>
+            <SubmitButton pending={isSubmitting}>Save settings</SubmitButton>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
