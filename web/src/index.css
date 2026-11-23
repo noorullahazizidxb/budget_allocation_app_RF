@@ -51,3 +51,8 @@
   background-image: radial-gradient(hsl(var(--primary) / 0.12) 1px, transparent 1px);
   background-size: 22px 22px;
 }
+/* Dot grid for primary-coloured panels, where the regular grid would vanish. */
+.bg-grid-contrast {
+  background-image: radial-gradient(hsl(var(--primary-foreground) / 0.35) 1px, transparent 1px);
+  background-size: 22px 22px;
+}

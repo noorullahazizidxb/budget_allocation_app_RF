@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Layers, PiggyBank, TrendingDown, Wallet, type LucideIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { fadeUp, revealOnMount, stagger } from '@/lib/motion';
 import { cn, formatMoney } from '@/lib/utils';
 import type { Summary } from '@/stores/budget.store';
 
@@ -39,10 +40,15 @@ function buildStats(summary: Summary, currency: string): Stat[] {
 
 export function SummaryCards({ summary, currency }: { summary: Summary; currency: string }) {
   return (
-    <ul className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-4 xl:grid-cols-4" aria-label="Budget summary">
-      {buildStats(summary, currency).map(({ label, value, icon: Icon, tone, share, note, warn }, i) => (
-        <motion.li key={label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-          <Card className="h-full p-4 transition-shadow hover:shadow-md sm:p-5">
+    <motion.ul
+      className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-4 xl:grid-cols-4"
+      aria-label="Budget summary"
+      variants={stagger(0.06, 0.08)}
+      {...revealOnMount}
+    >
+      {buildStats(summary, currency).map(({ label, value, icon: Icon, tone, share, note, warn }) => (
+        <motion.li key={label} variants={fadeUp}>
+          <Card className="h-full p-4 sm:p-5">
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm font-medium text-muted-foreground">{label}</p>
               <span className={cn('grid h-8 w-8 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9', tone)}><Icon className="h-4 w-4" aria-hidden /></span>
@@ -58,6 +64,6 @@ export function SummaryCards({ summary, currency }: { summary: Summary; currency
           </Card>
         </motion.li>
       ))}
-    </ul>
+    </motion.ul>
   );
 }

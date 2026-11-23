@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { duration } from '@/lib/motion';
 import { useThemeStore } from '@/stores/theme.store';
 
 export function ThemeToggle() {
@@ -13,7 +14,7 @@ export function ThemeToggle() {
           initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
           animate={{ rotate: 0, opacity: 1, scale: 1 }}
           exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: duration.fast }}
         >
           {resolved === 'dark' ? <Sun /> : <Moon />}
         </motion.span>

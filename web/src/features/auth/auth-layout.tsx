@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { PieChart, ShieldCheck, Sparkles } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { ease, fadeUp, revealOnMount, settle, stagger } from '@/lib/motion';
 import { preloadRecaptcha } from '@/lib/recaptcha';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -21,16 +22,16 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
         <motion.div
           className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/10 blur-3xl"
           animate={{ scale: [1, 1.15, 1] }}
-          transition={{ duration: 8, repeat: Infinity }}
+          transition={{ duration: 8, ease: ease.inOut, repeat: Infinity }}
         />
         <div className="relative w-fit rounded-xl bg-white/95 px-4 py-3 shadow-lg backdrop-blur dark:bg-neutral-950/90">
           <Logo />
         </div>
         <div className="relative space-y-8">
           <h2 className="max-w-md text-4xl font-bold leading-tight">Every budget decision, beautifully organized.</h2>
-          <ul className="space-y-5">
-            {perks.map(({ icon: Icon, title: t, text }, i) => (
-              <motion.li key={t} className="flex gap-4" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.1 }}>
+          <motion.ul className="space-y-5" variants={stagger(0.1, 0.2)} {...revealOnMount}>
+            {perks.map(({ icon: Icon, title: t, text }) => (
+              <motion.li key={t} className="flex gap-4" variants={fadeUp}>
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white/15"><Icon className="h-5 w-5" aria-hidden /></span>
                 <div>
                   <p className="font-semibold">{t}</p>
@@ -38,14 +39,14 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
                 </div>
               </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         </div>
         <p className="relative text-sm text-white/70">© {new Date().getFullYear()} DevMinds</p>
       </aside>
 
       <main id="main" className="relative flex flex-col">
         <div className="flex items-center justify-between gap-3 px-4 py-4 sm:p-6">
-          <Link to="/" aria-label="DevMinds Budget App home" className="rounded-md lg:invisible">
+          <Link to="/" aria-label="DevMinds Budget App home" className="flex min-h-11 items-center rounded-md lg:invisible">
             <Logo variant="compact" />
           </Link>
           <ThemeToggle />
@@ -53,9 +54,8 @@ export function AuthLayout({ title, subtitle, children }: { title: string; subti
         <div className="flex flex-1 items-start justify-center px-4 pb-12 pt-4 sm:items-center sm:px-6 sm:pt-0">
           <motion.div
             className="w-full max-w-sm space-y-6 sm:rounded-2xl sm:border sm:bg-card sm:p-8 sm:shadow-sm lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
+            variants={settle}
+            {...revealOnMount}
           >
             <div className="space-y-2">
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>

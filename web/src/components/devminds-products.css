@@ -56,7 +56,9 @@ a.dmp-card:focus-visible { outline: 2px solid var(--dmp-accent); outline-offset:
   height: 40px;
   border-radius: 10px;
   background: color-mix(in oklab, var(--dmp-accent) 8%, transparent);
+  transition: background-color 180ms ease;
 }
+a.dmp-card:hover .dmp-icon { background: color-mix(in oklab, var(--dmp-accent) 16%, transparent); }
 .dmp-img { display: block; width: auto; height: 26px; }
 .dmp-dark { display: none; }
 .dark .dmp-light { display: none; }
@@ -86,6 +88,6 @@ a.dmp-card:focus-visible { outline: 2px solid var(--dmp-accent); outline-offset:
   .dmp-grid { grid-template-columns: repeat(var(--dmp-cols, 4), minmax(0, 1fr)); gap: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dmp-card { transition: none; }
+  .dmp-card, .dmp-icon { transition: none; }
   a.dmp-card:hover { transform: none; }
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
+import { fadeUp, revealOnMount, settle, stagger } from '@/lib/motion';
 import { useAuthStore } from '@/stores/auth.store';
 import { useBudgetStore, type Allocation } from '@/stores/budget.store';
 import { AllocationChart } from './allocation-chart';
@@ -39,7 +40,7 @@ export function DashboardPage() {
 
   return (
     <AppShell mainClassName="container space-y-6 py-6 sm:py-8">
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <motion.div variants={settle} {...revealOnMount} className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           {firstName && <p className="text-sm text-muted-foreground">Hello, {firstName} 👋</p>}
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Budget overview</h1>
@@ -65,8 +66,8 @@ export function DashboardPage() {
             />
           )}
           <SummaryCards summary={overview.summary} currency={overview.currency} />
-          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2">
+          <motion.div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3" variants={stagger(0.08, 0.2)} {...revealOnMount}>
+            <motion.div variants={fadeUp} className="lg:col-span-2">
               <AllocationList
                 allocations={overview.allocations}
                 currency={overview.currency}
@@ -74,12 +75,12 @@ export function DashboardPage() {
                 onEdit={(a) => setEditing({ open: true, allocation: a })}
                 onExpense={setExpenseFor}
               />
-            </div>
-            <div className="space-y-6">
+            </motion.div>
+            <motion.div variants={fadeUp} className="space-y-6">
               <AllocationChart overview={overview} />
               <RecentExpenses currency={overview.currency} />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </>
       )}
 
