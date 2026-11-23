@@ -1,9 +1,11 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { Receipt, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
+import { listItem } from '@/lib/motion';
 import { formatMoney } from '@/lib/utils';
 import { useBudgetStore, type Expense } from '@/stores/budget.store';
 import { withToast } from './use-submit-toast';
@@ -22,33 +24,43 @@ export function RecentExpenses({ currency }: { currency: string }) {
       </CardHeader>
       <CardContent>
         {expenses.length ? (
-          <ul className="-my-1 divide-y">
-            {expenses.map((e) => (
-              <li key={e.id} className="group flex items-center justify-between gap-3 py-2.5">
-                <div className="flex min-w-0 items-center gap-3">
-                  <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: e.allocation.color }} aria-hidden />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{e.note || e.allocation.name}</p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {e.allocation.name} · <time dateTime={e.spentAt}>{dateFormat.format(new Date(e.spentAt))}</time>
-                    </p>
+          <ul className="relative -my-1 divide-y">
+            <AnimatePresence initial={false} mode="popLayout">
+              {expenses.map((e) => (
+                <motion.li
+                  key={e.id}
+                  layout
+                  variants={listItem}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="group flex items-center justify-between gap-3 py-2.5"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: e.allocation.color }} aria-hidden />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{e.note || e.allocation.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {e.allocation.name} · <time dateTime={e.spentAt}>{dateFormat.format(new Date(e.spentAt))}</time>
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex shrink-0 items-center">
-                  <span className="text-sm font-semibold tabular-nums">−{formatMoney(e.amount, currency)}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
-                    aria-label={`Delete expense ${e.note || e.allocation.name}`}
-                    title="Delete expense"
-                    onClick={() => setDeleting({ open: true, expense: e })}
-                  >
-                    <Trash2 className="text-destructive" />
-                  </Button>
-                </div>
-              </li>
-            ))}
+                  <div className="flex shrink-0 items-center">
+                    <span className="text-sm font-semibold tabular-nums">−{formatMoney(e.amount, currency)}</span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
+                      aria-label={`Delete expense ${e.note || e.allocation.name}`}
+                      title="Delete expense"
+                      onClick={() => setDeleting({ open: true, expense: e })}
+                    >
+                      <Trash2 className="text-destructive" />
+                    </Button>
+                  </div>
+                </motion.li>
+                ))}
+            </AnimatePresence>
           </ul>
         ) : (
           <EmptyState icon={Receipt} title="No expenses yet" description="Use the receipt button on an allocation to record your first expense." />

@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Layers, Pencil, Plus, Receipt, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Progress } from '@/components/ui/progress';
+import { listItem } from '@/lib/motion';
 import { cn, formatMoney } from '@/lib/utils';
 import { useBudgetStore, type Allocation } from '@/stores/budget.store';
 import { withToast } from './use-submit-toast';
@@ -18,21 +19,26 @@ interface Props {
   onExpense: (a: Allocation) => void;
 }
 
-function AllocationRow({ allocation: a, currency, onEdit, onExpense, onDelete }: {
+interface RowProps {
   allocation: Allocation;
   currency: string;
   onEdit: () => void;
   onExpense: () => void;
   onDelete: () => void;
-}) {
+}
+
+/** Forwards its ref so AnimatePresence "popLayout" can lift a deleted row out of the flow while siblings glide up. */
+const AllocationRow = forwardRef<HTMLLIElement, RowProps>(function AllocationRow({ allocation: a, currency, onEdit, onExpense, onDelete }, ref) {
   const pct = a.amount > 0 ? Math.round((a.spent / a.amount) * 100) : 0;
   const over = a.spent > a.amount;
   return (
     <motion.li
+      ref={ref}
       layout
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: 'auto' }}
-      exit={{ opacity: 0, height: 0 }}
+      variants={listItem}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
       className="group flex flex-wrap items-center gap-x-3 rounded-lg border bg-background/60 p-4 transition-colors hover:bg-muted/40 focus-within:bg-muted/40"
     >
       <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: a.color }} aria-hidden />
@@ -67,7 +73,7 @@ function AllocationRow({ allocation: a, currency, onEdit, onExpense, onDelete }:
       </div>
     </motion.li>
   );
-}
+});
 
 export function AllocationList({ allocations, currency, onCreate, onEdit, onExpense }: Props) {
   const remove = useBudgetStore((s) => s.deleteAllocation);
@@ -84,8 +90,8 @@ export function AllocationList({ allocations, currency, onCreate, onEdit, onExpe
       </CardHeader>
       <CardContent>
         {allocations.length ? (
-          <ul className="space-y-3">
-            <AnimatePresence initial={false}>
+          <ul className="relative space-y-3">
+            <AnimatePresence initial={false} mode="popLayout">
               {allocations.map((a) => (
                 <AllocationRow
                   key={a.id}

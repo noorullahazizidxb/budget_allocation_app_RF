@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { MotionProvider } from '@/components/motion-provider';
 import { GoogleCompletePage } from '@/features/auth/google-complete-page';
 import { SignInPage } from '@/features/auth/sign-in-page';
 import { SignUpPage } from '@/features/auth/sign-up-page';
@@ -71,9 +72,11 @@ export function AppRoutes() {
 export default function App() {
   const theme = useThemeStore((s) => s.resolved);
   return (
-    <BrowserRouter>
-      <AppRoutes />
-      <Toaster theme={theme} richColors position="top-right" />
-    </BrowserRouter>
+    <MotionProvider>
+      <BrowserRouter>
+        <AppRoutes />
+        <Toaster theme={theme} richColors position="top-right" />
+      </BrowserRouter>
+    </MotionProvider>
   );
 }

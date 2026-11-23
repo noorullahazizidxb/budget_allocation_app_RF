@@ -41,7 +41,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
       <div className="container flex h-16 items-center justify-between gap-2 sm:gap-4">
-        <Link to="/" aria-label="DevMinds Budget App home" className="rounded-md">
+        <Link to="/" aria-label="DevMinds Budget App home" className="flex min-h-11 min-w-11 items-center rounded-md">
           <ResponsiveLogo />
         </Link>
         <nav aria-label="Account" className="flex items-center gap-1 sm:gap-2">
