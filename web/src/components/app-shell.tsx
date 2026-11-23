@@ -9,7 +9,7 @@ export function AppShell({ children, mainClassName }: { children: ReactNode; mai
     <div className="flex min-h-screen flex-col">
       <a href="#main" className="skip-link">Skip to content</a>
       <SiteHeader />
-      <main id="main" tabIndex={-1} className={cn('flex-1 focus:outline-none', mainClassName)}>
+      <main id="main" tabIndex={-1} className={cn('flex-1 focus:outline-none focus-visible:ring-0', mainClassName)}>
         {children}
       </main>
       <SiteFooter />
